@@ -22,7 +22,7 @@ def play(word, session, player):
         guess = input("Please enter a letter or word: ").upper()
         if len(guess) == 1 and guess.isalpha():    
             if guess in guessed_letters:
-                print("You already guessed the letter", guess)
+                print("You already guessed the letter", guess, "\n", guessed_letters)
             elif guess not in word:
                 print(guess, "is not in the word.")
                 tries -= 1
@@ -39,7 +39,7 @@ def play(word, session, player):
                     guessed = True
         elif len(guess) == len(word) and guess.isalpha():
             if guess in guessed_words:
-                print("You already guessed the word", guess)
+                print("You already guessed the word", guess, "\n", guessed_words)
             elif guess != word:
                 print(guess, "is not the word.")
                 tries -= 1
