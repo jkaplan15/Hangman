@@ -1,5 +1,6 @@
-
-
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from models import Player    
 import random
 from words import word_list
 
@@ -7,19 +8,19 @@ def get_word():
     word = random.choice(word_list)
     return word.upper()
 
-def play(word):
+def play(word, session, player):
     word_completion = "_" * len(word)
     guessed = False
     guessed_letters = []
     guessed_words = []
     tries = 6
-    print("Ket's play Hangman!")
+    print("Let's play Hangman!")
     print(display_hangman(tries))
     print(word_completion)
     print("\n")
     while not guessed and tries > 0:
-        word_completion = str(len(word))
-        guess = input("Please enter a letter or word: " + "\n" + "(Hint: the word is " + len_word + " letters long.)" + ("\n")).upper()        if len(guess) == 1 and guess.isalpha():
+        guess = input("Please enter a letter or word: ").upper()
+        if len(guess) == 1 and guess.isalpha():    
             if guess in guessed_letters:
                 print("You already guessed the letter", guess)
             elif guess not in word:
@@ -53,8 +54,10 @@ def play(word):
         print("\n")
     if guessed:
         print("Congrats, you guessed the word! You win!")
+        player.wins += 1
     else:
         print("Sorry, you ran out of tries. The word was " + word + ". Maybe next time!")
+        player.losses += 1
 
 def display_hangman(tries):
     stages = [  # final state: head, torso, both arms, and both legs
@@ -132,13 +135,30 @@ def display_hangman(tries):
 
 
 
-def main():
+def main(session, player):
     word = get_word()
-    play(word)
+    play(word, session, player)
     while input("Play Again? (Y/N) ").upper() == "Y":
         word = get_word()
-        play(word)
+        play(word, session, player)
 
-if __name__ == "__main__":
-    main()
+if __name__ == "__main__": 
+    engine = create_engine('sqlite:///hangman.db')
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+
+    player_name = input("Enter your name: ")
+    # print(player_name)
+
+    player = session.query(Player).filter(Player.username == player_name).first()
+    if not player:
+        player = Player(username = player_name, wins = 0, losses = 0)
+        session.add(player)
+    main(session, player)
+
+    session.commit()
+
+
+
 
