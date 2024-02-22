@@ -1,6 +1,6 @@
 Welcome to Flatiron Hangman! Join us while you take a break from your journey to becoming a full stack engineer! In this program you will be able to play a childhood favorite game without even leaving your terminal. 
 
-Navigate to the Hangman directory and cd into 'db'. Then run <python Hangman.py> in your terminal.
+Navigate to the Hangman directory and cd into 'db'. Then run python hangman.py in your terminal.
 
 You should now be prompted to enter a username (this is important because your username will hold your overall win / loss record so choose carefully). Once you enter your username press enter in your terminal. 
 
